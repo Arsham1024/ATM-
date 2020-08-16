@@ -31,7 +31,7 @@ public class ATM {
       currentUser.printAccountsSummary();
 
       //init
-      int choice;
+      int choice = -1;
 
       //user Menu
       do{
@@ -82,6 +82,52 @@ public class ATM {
    }
 
    private static void transferFunds(User currentUser, Scanner sc) {
+      //inits
+      int fromAcct;
+      int toAcct;
+      double amount;
+      double accBall;
+
+      //get the account to transfer from
+      do {
+         System.out.printf("Enter the number (1-%d) of the acoount \n"
+                           + "to transfer from: ");
+         //the accounts are numbered naturally.
+         fromAcct = sc.nextInt()-1 ;
+         if (fromAcct<0 || fromAcct>= currentUser.numAccounts()){
+            System.out.println("Invalid account. please try again.");
+         }
+      }while(fromAcct<0 || fromAcct>= currentUser.numAccounts());
+
+      accBall = currentUser.getAccBalance(fromAcct);
+
+      //get the account to transfer TO.
+      do {
+         System.out.printf("Enter the number (1-%d) of the acoount \n"
+            + "to transfer to: ");
+         //the accounts are numbered naturally.
+         toAcct = sc.nextInt()-1 ;
+         if (toAcct<0 || toAcct>= currentUser.numAccounts()){
+            System.out.println("Invalid account. please try again.");
+         }
+      }while(toAcct<0 || toAcct>= currentUser.numAccounts());
+
+      //get the amount to transfer
+
+      do{
+         System.out.printf("Enter the amount to transfer (Max $%.02f): $", accBall);
+         amount = sc.nextDouble();
+         if (amount<0 || amount>accBall){
+            System.out.println("The amount is not valid!");
+         }
+      }while(amount<0 || amount>accBall);
+
+      //do the transfer
+      currentUser.addAcctTransaction (fromAcct, -1*amount,
+                                     String.format("Transfer to account %s", currentUser.getAccUUID(toAcct)));
+      currentUser.addAcctTransaction (toAcct, amount,
+                                     String.format("Transfer to account %s", currentUser.getAccUUID(fromAcct)));
+
    }
 
    private static void depositFunds(User currentUser, Scanner sc) {
