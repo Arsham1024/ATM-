@@ -19,6 +19,18 @@ public class Bank {
     */
    private ArrayList <Account> accounts;
 
+
+   /**
+    * Getter methods in this section.
+    * get name.
+    * @return the name of the bank
+    */
+   public String getName() {
+      return name;
+   }
+
+
+
    /**
     * Create a new bank with empty list of accounts and users.
     * @param name name of the bank

@@ -8,11 +8,6 @@ public class Account {
    private String name;
 
    /**
-    * The current balance of the account. maybe we can calculate it everytime?
-    */
-   private double balance;
-
-   /**
     * The account ID number.
     */
    private String uuid;
@@ -43,5 +38,37 @@ public class Account {
     */
    public String getUUID() {
       return this.uuid;
+   }
+
+   /**
+    * get Summary line for the account at hand.
+    * @return the line summary.
+    */
+   public String getSummaryLine() {
+      //get the balance
+      double balance = this.getBalance();
+
+      // format the summery line, depending on whether the balance is negative
+
+      if (balance >= 0){
+         return String.format("%s : $%.02f : %s", this.uuid, balance, this.name);
+      }else
+         return String.format("%s : $(%.02f) : %s", this.uuid, balance, this.name);
+   }
+
+   public double getBalance() {
+      double balance = 0;
+      for (Transaction t : this.transactions){
+         balance  += t.getAmount();
+      }
+      return balance;
+   }
+
+   public void printTransHistory() {
+      System.out.printf("\nTransaction history for the account %s \n", this.uuid);
+      for (int i = this.transactions.size()-1; i >= 0 ; i--) {
+         System.out.printf(this.transactions.get(i).getSummaryLine());
+      }
+      System.out.println();
    }
 }
