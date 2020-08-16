@@ -30,6 +30,9 @@ public class Account {
 
       //init transactions
       this.transactions = new ArrayList<Transaction>();
+
+      //init UUID
+      this.uuid = theBank.getNewUserUUID();
    }
 
    /**

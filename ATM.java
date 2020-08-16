@@ -35,9 +35,9 @@ public class ATM {
 
       //user Menu
       do{
-         System.out.printf("Welcome %s, what would you like to do?", currentUser.getFirstName());
+         System.out.printf("Welcome %s, what would you like to do?\n", currentUser.getFirstName());
 
-         System.out.println("1- transaction history");
+         System.out.println("1- Transaction history");
          System.out.println("2- Withdraw");
          System.out.println("3- Deposit");
          System.out.println("4- Transfer");
@@ -91,7 +91,7 @@ public class ATM {
       //get the account to transfer from
       do {
          System.out.printf("Enter the number (1-%d) of the acoount \n"
-                           + "to transfer from: ");
+                           + "to transfer from: ", currentUser.numAccounts());
          //the accounts are numbered naturally.
          fromAcct = sc.nextInt()-1 ;
          if (fromAcct<0 || fromAcct>= currentUser.numAccounts()){
@@ -104,7 +104,7 @@ public class ATM {
       //get the account to transfer TO.
       do {
          System.out.printf("Enter the number (1-%d) of the acoount \n"
-            + "to transfer to: ");
+            + "to transfer to: ", currentUser.numAccounts());
          //the accounts are numbered naturally.
          toAcct = sc.nextInt()-1 ;
          if (toAcct<0 || toAcct>= currentUser.numAccounts()){
@@ -128,12 +128,91 @@ public class ATM {
       currentUser.addAcctTransaction (toAcct, amount,
                                      String.format("Transfer to account %s", currentUser.getAccUUID(fromAcct)));
 
+      sc.nextLine();
+
    }
 
    private static void depositFunds(User currentUser, Scanner sc) {
+      //inits
+      int toAcct;
+      double amount;
+      double accBall;
+      String memo;
+
+      //get the account to transfer from
+      do {
+         System.out.printf("Enter the number (1-%d) of the acoount \n"
+            + "to deposit in: ", currentUser.numAccounts());
+         //the accounts are numbered naturally.
+          toAcct = sc.nextInt()-1 ;
+         if (toAcct<0 || toAcct>= currentUser.numAccounts()){
+            System.out.println("Invalid account. please try again.");
+         }
+      }while(toAcct<0 || toAcct>= currentUser.numAccounts());
+
+      accBall = currentUser.getAccBalance(toAcct);
+      //get the amount to transfer
+
+      do{
+         System.out.printf("Enter the amount to transfer (Max $%.02f): $", accBall);
+         amount = sc.nextDouble();
+         if (amount<0) {
+            System.out.println("The amount is not valid!");
+         }
+      }while(amount<0);
+
+      //consume the rest of the input line.
+      sc.nextLine();
+
+      //get a memo
+
+      System.out.print("Enter a memo: ");
+      memo = sc.nextLine();
+
+      //do the withdraw
+      currentUser.addAcctTransaction(toAcct, amount, memo);
    }
 
    private static void withdrawFunds(User currentUser, Scanner sc) {
+      //inits
+      int fromAcct;
+      double amount;
+      double accBall;
+      String memo;
+
+      //get the account to transfer from
+      do {
+         System.out.printf("Enter the number (1-%d) of the acoount \n"
+            + "to withdraw from: ", currentUser.numAccounts());
+         //the accounts are numbered naturally.
+         fromAcct = sc.nextInt()-1 ;
+         if (fromAcct<0 || fromAcct>= currentUser.numAccounts()){
+            System.out.println("Invalid account. please try again.");
+         }
+      }while(fromAcct<0 || fromAcct>= currentUser.numAccounts());
+
+      //set account balance
+      accBall = currentUser.getAccBalance(fromAcct);
+      //get the amount to transfer
+
+      do{
+         System.out.printf("Enter the amount to transfer (Max $%.02f): $", accBall);
+         amount = sc.nextDouble();
+         if (amount<0 || amount>accBall) {
+            System.out.println("The amount is not valid!");
+         }
+      }while(amount<0 || amount>accBall);
+
+      //consume the rest of the input line.
+      sc.nextLine();
+
+      //get a memo
+
+      System.out.print("Enter a memo: ");
+      memo = sc.nextLine();
+
+      //do the withdraw
+      currentUser.addAcctTransaction(fromAcct, -1*amount, memo);
    }
 
    private static void showTransactionHistory(User currentUser, Scanner sc) {

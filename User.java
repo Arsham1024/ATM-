@@ -101,9 +101,9 @@ public class User {
    }
 
    public void printAccountsSummary() {
-      System.out.printf("\n\n%s's accounts summary", this.firstName);
+      System.out.printf("\n\n%s's accounts summary:\n", this.firstName);
       for (int i =0 ; i<this.accounts.size(); i++){
-         System.out.printf("%d %s\n", i+1 , this.accounts.get(i).getSummaryLine());
+         System.out.printf("%d- %s\n", i+1 , this.accounts.get(i).getSummaryLine());
       }
       System.out.println();
    }
